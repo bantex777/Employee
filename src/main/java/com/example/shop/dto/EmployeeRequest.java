@@ -2,6 +2,7 @@ package com.example.shop.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EmployeeRequest {
 
@@ -14,6 +15,9 @@ public class EmployeeRequest {
 
     @NotBlank(message = "Position is required")
     private String position;
+
+    @NotNull(message = "Department ID is required")
+    private Long departmentId;
 
     public EmployeeRequest() {
 
@@ -43,6 +47,14 @@ public class EmployeeRequest {
         this.position = position;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
 
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    
     
 }

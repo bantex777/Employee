@@ -12,11 +12,20 @@ public class EmployeeReponse {
 
     private String position;
 
+    private Long departmentId;
+
+    private String departmentName;
+
     public EmployeeReponse(Employee employee) {
         this.id = employee.getId();
         this.name = employee.getName();
         this.email = employee.getEmail();
         this.position = employee.getPosition();
+
+        if (employee.getDepartment() != null) {
+            this.departmentId = employee.getDepartment().getId();
+            this.departmentName = employee.getDepartment().getName();
+        }
     }
 
     public Long getId() {
@@ -51,5 +60,21 @@ public class EmployeeReponse {
         this.position = position;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+    
     
 }

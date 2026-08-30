@@ -1,6 +1,7 @@
 package com.example.shop.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.shop.dto.EmployeeReponse;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,13 +31,33 @@ public class EmployerController {
 
     private final EmployeeService employeeService;
 
+
     public EmployerController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeReponse>> getEmployess() {
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public ResponseEntity<Page<EmployeeReponse>> getEmployess(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        return ResponseEntity.ok(employeeService.getAllEmployees(page, size, sortBy, direction));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<EmployeeReponse>> searchEmployeeByName(
+        @RequestParam String name
+    ) {
+        return ResponseEntity.ok(employeeService.searchEmployeeByName(name));
+    }
+
+    @GetMapping("/department")
+    public ResponseEntity<List<EmployeeReponse>> getEmployeeByDepartment(
+        @RequestParam String name
+    ) {
+        return ResponseEntity.ok(employeeService.getEmployeeByDepartment(name));
     }
 
     @GetMapping("/{id}")
