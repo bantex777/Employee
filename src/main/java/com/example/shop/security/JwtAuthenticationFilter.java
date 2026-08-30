@@ -4,9 +4,12 @@ import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.shop.service.CustomDetailService;
 import com.example.shop.service.JwtService;
 
 import jakarta.servlet.FilterChain;
@@ -19,8 +22,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    private final CustomDetailService userDetailsService;
+
+    public JwtAuthenticationFilter(JwtService jwtService, CustomDetailService userDetailService) {
         this.jwtService = jwtService;
+        this.userDetailsService = userDetailService;
     }
 
     @Override
@@ -42,8 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username =
                             jwtService.extractUsername(token);
 
+            UserDetails userDetails = 
+                            userDetailsService.loadUserByUsername(username);
+
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(username, null, java.util.Collections.emptyList());      
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());      
                     
             SecurityContextHolder
                     .getContext()
