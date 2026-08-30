@@ -21,7 +21,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long>{
     List<Employee> finnAllWithDepartment();
 
     @Query("""
-            SELECT e FROM Employee ea
+            SELECT e FROM Employee e
                 WHERE e.position = :position
             """)
     List<Employee> findByPosition(@Param("position") String position);

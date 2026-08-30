@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.shop.dto.EmployeeReponse;
 import com.example.shop.dto.EmployeeRequest;
-import com.example.shop.model.Employee;
 import com.example.shop.service.EmployeeService;
 
 import jakarta.validation.Valid;
