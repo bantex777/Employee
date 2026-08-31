@@ -15,8 +15,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    
-    
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -28,26 +26,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(
-                auth -> auth.requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/employees/**")
-                        .hasAnyRole("USER","ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/employees/**")
-                        .hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/employees/**")
-                        .hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/employees/**")
-                        .hasAnyRole("ADMIN")
-                        .anyRequest()
-                        .authenticated()
-            )
-            .addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web
-                            .authentication
-                            .UsernamePasswordAuthenticationFilter.class);
 
-            return http.build();
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(
+                        auth -> auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/actuator/health").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/employees/**")
+                                .hasAnyRole("USER", "ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/employees/**")
+                                .hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/employees/**")
+                                .hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/employees/**")
+                                .hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/departments/**")
+                                .hasAnyRole("ADMIN")
+                                .anyRequest()
+                                .authenticated())
+                .addFilterBefore(jwtAuthenticationFilter,
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 }
